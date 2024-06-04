@@ -1,0 +1,44 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'node-exporter'
+    ec2_sd_configs:
+      - region: 'us-east-1'
+        access_key: '*'
+        secret_key: '*'
+        port: 9100
+        filters:
+          - name: 'tag:metric'
+            values:
+              - 'vm'
+              - 'cpu'
+    relabel_configs:
+      - source_labels: [__meta_ec2_tag_metric]
+        regex: 'vm'
+        target_label: metric_type
+        replacement: 'vm'
+      - source_labels: [__meta_ec2_tag_metric]
+        regex: 'cpu'
+        target_label: metric_type
+        replacement: 'cpu'
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ['alertmanager:9093']
+
+rule_files:
+  - /etc/prometheus/alert.rules.yml
+
+#scrape_configs:
+#  - job_name: 'node-exporter'
+#    ec2_sd_configs:
+#      - region: 'your-aws-region'
+#        access_key: 'your-access-key'
+#        secret_key: 'your-secret-key'
+#        port: 9100
+#        filters:
+#          - name: 'tag:metric'
+#            values:
+#              - 'vm'

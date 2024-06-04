@@ -1,0 +1,21 @@
+groups:
+- name: cpu_alert_rules
+  rules:
+  - alert: cpu_usage_remote
+    expr: 100 - (avg by (instance) (rate(node_cpu_seconds_total{instance='172.31.27.241:9100', mode="idle"}[1m])) * 100) > 80
+    for: 10s
+    labels:
+      severity: warning
+      metric_type: cpu
+    annotations:
+      summary: "High CPU usage detected"
+      description: "CPU usage is above 80% for more than 30 seconds on remote host."
+  - alert: cpu_usage_local
+    expr: node_memory_Active_bytes / node_memory_MemTotal_bytes * 100 > 80
+    for: 10s
+    labels:
+      severity: warning
+      metric_type: vm
+    annotations:
+      summary: High VM Usage on Instance 2
+      description: "VM usage is above 80% on instance 2"

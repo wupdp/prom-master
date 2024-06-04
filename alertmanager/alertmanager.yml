@@ -1,0 +1,13 @@
+global:
+  resolve_timeout: 15m
+
+route:
+  receiver: 'telegram'
+
+receivers:
+  - name: 'telegram'
+    telegram_configs:
+    - bot_token: '7134227634:AAF6ztH7mhzRMFx1mon2A44w1Y-Phtsq8Qk'
+      chat_id: 703086022
+      send_resolved: true
+      message: "Attention! {{ .CommonAnnotations.summary }} \n {{ .CommonAnnotations.description }}"
