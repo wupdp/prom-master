@@ -2,7 +2,7 @@ global:
   scrape_interval: 3s
   external_labels:
     prometheus: prom-0
-
+    
 scrape_configs:
   - job_name: 'node-exporter'
     ec2_sd_configs:

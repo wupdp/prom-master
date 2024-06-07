@@ -1,5 +1,3 @@
-version: '3.7'
-
 services:
   prometheus:
     image: prom/prometheus:latest
@@ -10,6 +8,10 @@ services:
       - '--config.file=/etc/prometheus/prometheus.yml'
     ports:
       - "9090:9090"
+    networks:
+      - monitoring_network
+    depends_on:
+      - thanos-sidecar
 
   alertmanager:
     image: prom/alertmanager:latest
@@ -17,7 +19,9 @@ services:
       - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
+    networks:
+      - monitoring_network
 
 networks:
-  default:
+  monitoring_network:
     name: monitoring_network
